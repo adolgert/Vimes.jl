@@ -37,6 +37,13 @@ function reset(dir, tmp)
   return
 end
 
+function reset(dir, tmp, f)
+  relative_f = f[length(tmp) + 2:end]
+  rm(f)
+  cp(joinpath(dir, relative_f), f)
+  return
+end
+
 diff(dir, tmp) = _read(`git diff $(joinpath(dir, "src")) $(joinpath(tmp, "src"))`)[1]
 
 function logdiff(dir, tmp, dead = false)
@@ -52,6 +59,15 @@ function checktests(dir, tmp)
     write(joinpath(dir, ".vimes", "log.txt"), out)
     error("Tests fail before starting. See `.vimes/log.txt`.")
   end
+end
+
+function mutate_and_reset(callback::Function, dir, tmp, idx)
+  f = nothing
+  while isempty(diff(dir, tmp))
+    f = mutate(tmp, idx)
+  end
+  callback()
+  reset(dir, tmp, f)
 end
 
 function test(dir, tmp, idx; dead = false)

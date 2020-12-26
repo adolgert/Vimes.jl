@@ -12,6 +12,7 @@ function apply!(f, path, patch)
       p == path ? patch(x) : x
     end
   end
+  f
 end
 
 function index(ex, fs)
