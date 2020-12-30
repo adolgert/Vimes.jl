@@ -12,5 +12,6 @@ using SourceWalk: sourcemap
 include("library.jl")
 include("patch.jl")
 include("run.jl")
+include("coverage_matrix.jl")
 
 end # module
